@@ -18,25 +18,25 @@ public class BankApplication {
     }};
 
 
-    public void process(String accountId, int amount, String currency) throws Exception {
+    public void process(String id, int balance, String currency) throws Exception {
 
-        accounts.stream().filter(account -> account.getId().equals(accountId))
+        accounts.stream().filter(account -> account.getId().equals(id))
                 .findAny().orElseThrow(WrongAccountException::new);
 
-        accounts.stream().filter(account -> account.getId().equals(accountId))
+        accounts.stream().filter(account -> account.getId().equals(id))
                 .filter(account -> account.getCurrency().equals(currency))
                 .findAny().orElseThrow(WrongCurrencyException::new);
 
-        accounts.stream().filter(account -> account.getId().equals(accountId))
+        accounts.stream().filter(account -> account.getId().equals(id))
                 .filter(account -> account.getCurrency().equals(currency))
-                .filter(account -> account.getBalance() >= amount)
+                .filter(account -> account.getBalance() <= balance)
                 .findAny().orElseThrow(WrongOperationException::new);
 
 
         Account desiredAccount = accounts.stream()
-                .filter(account -> account.getId().equals(accountId))
+                .filter(account -> account.getId().equals(id))
                 .filter(account -> account.getCurrency().equals(currency))
-                .filter(account -> account.getBalance() >= amount).findAny()
+                .filter(account -> account.getBalance() >= balance).findAny()
                 .orElseThrow();
 
         int randomInt = new Random().nextInt(2);
@@ -45,6 +45,6 @@ public class BankApplication {
            throw new Exception();
        }
 
-        desiredAccount.setBalance(desiredAccount.getBalance() - amount);
+        desiredAccount.setBalance(desiredAccount.getBalance() - balance);
     }
 }
